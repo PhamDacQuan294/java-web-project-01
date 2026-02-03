@@ -2,6 +2,7 @@ package com.javaweb.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +24,10 @@ public class BuildingAPI {
 	private BuildingService buildingService;
 	
 	@GetMapping(value = "/api/building")
-	public List<BuildingDTO> getBuilding(@RequestParam(name="name", required=false) String name,
-										@RequestParam(name="numberOfBasement", required=false) Integer numberOfBasement) {
-		List<BuildingDTO> result = buildingService.findAll(name, numberOfBasement);
+	public List<BuildingDTO> getBuilding(@RequestParam Map<String, Object> params,
+										@RequestParam(name="typeCode", required = false) List<String> typeCode) {
+		List<BuildingDTO> result = buildingService.findAll(params, typeCode);
 		return result;
-	}
-	
-	@PostMapping("/api/building")
-	public Object getBuilding(@RequestBody BuildingDTO building) {
-		valiDate(building);
-		return null;
 	}
 	
 	public void valiDate(BuildingDTO buildingDTO) {
