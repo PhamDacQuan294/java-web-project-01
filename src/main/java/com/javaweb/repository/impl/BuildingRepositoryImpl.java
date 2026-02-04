@@ -113,7 +113,6 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		querySpecial(params, typeCode, where);
 		where.append("\n" + "GROUP BY b.id;");
 		sql.append(where);
-		System.out.print(sql);
 		List<BuildingEntity> result = new ArrayList<>();
 		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				Statement stmt = conn.createStatement();
