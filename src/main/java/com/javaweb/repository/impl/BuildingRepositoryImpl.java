@@ -15,15 +15,12 @@ import org.springframework.stereotype.Repository;
 
 import com.javaweb.repository.BuildingRepository;
 import com.javaweb.repository.entity.BuildingEntity;
+import com.javaweb.utils.ConnectionJDBCUtil;
 import com.javaweb.utils.NumberUtil;
 import com.javaweb.utils.StringUtil;
 
 @Repository
 public class BuildingRepositoryImpl implements BuildingRepository{
-	static final String DB_URL = "jdbc:mysql://localhost:3306/java_web_project01";
-	static final String USER = "root";
-	static final String PASS = "123456";
-	
 	public static void joinTable(Map<String, Object> params, List<String> typeCode, StringBuilder sql) {
 		String staffId = (String) params.get("staffId");
 		if (StringUtil.checkString(staffId)) {
@@ -114,7 +111,7 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		where.append("\n" + "GROUP BY b.id;");
 		sql.append(where);
 		List<BuildingEntity> result = new ArrayList<>();
-		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+		try (Connection conn = ConnectionJDBCUtil.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql.toString());){
 			

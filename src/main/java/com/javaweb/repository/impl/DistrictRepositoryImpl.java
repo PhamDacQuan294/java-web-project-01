@@ -11,20 +11,18 @@ import java.sql.SQLException;
 
 import com.javaweb.repository.DistrictRepository;
 import com.javaweb.repository.entity.DistrictEntity;
+import com.javaweb.utils.ConnectionJDBCUtil;
 
 @Repository
 public class DistrictRepositoryImpl implements DistrictRepository{
-	static final String DB_URL = "jdbc:mysql://localhost:3306/java_web_project01";
-	static final String USER = "root";
-	static final String PASS = "123456";
-	
+
 	@Override
 	public DistrictEntity findNameById(Long id) {
 		String sql = "SELECT d.name" + "\n" +   
 					 "FROM district d" + "\n" +
 					 "WHERE d.id = " + id + ";";
 		DistrictEntity districtEntity = new DistrictEntity();
-		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+		try (Connection conn = ConnectionJDBCUtil.getConnection();
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery(sql);) {
 
