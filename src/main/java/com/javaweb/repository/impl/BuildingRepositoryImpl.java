@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.print.attribute.standard.NumberUp;
 
@@ -66,12 +67,14 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 		String rentAreaFrom = (String) params.get("areaFrom");
 		
 		if (StringUtil.checkString(rentAreaTo) == true || StringUtil.checkString(rentAreaFrom) == true) {
+			where.append(" AND EXISTS (SELECT * FROM rentarea r WHERE b.id = r.buildingid ");
 			if (StringUtil.checkString(rentAreaTo)) {
-				where.append(" AND rentarea.value <= " + rentAreaTo);
+				where.append(" AND r.value <= " + rentAreaTo);
 			}
 			if (StringUtil.checkString(rentAreaFrom)) {
-				where.append(" AND rentarea.value >= " + rentAreaFrom);
+				where.append(" AND r.value >= " + rentAreaFrom);
 			}
+			where.append(") ");
 		}
 		
 		String rentPriceTo = (String) params.get("rentPriceTo");
@@ -87,12 +90,21 @@ public class BuildingRepositoryImpl implements BuildingRepository{
 			}
 		}
 		
+		// Java 7
+//		if (typeCode != null && typeCode.size() != 0) {
+//			List<String> code = new ArrayList<>();
+//			for (String item : typeCode) {
+//				code.add("'" + item + "'");
+//			}
+//			where.append(" AND renttype.code IN(" + String.join(",", code) + ") ");
+//		}
+		
+		// Java 8
 		if (typeCode != null && typeCode.size() != 0) {
-			List<String> code = new ArrayList<>();
-			for (String item : typeCode) {
-				code.add("'" + item + "'");
-			}
-			where.append(" AND renttype.code IN(" + String.join(",", code) + ") ");
+    		where.append(" AND(");
+    		String sql = typeCode.stream().map(it-> "renttype.code Like" + "'%" + it + "%' ").collect(Collectors.joining(" OR "));
+    		where.append(sql);
+    		where.append(" ) ");
 		}
 	}
 	
