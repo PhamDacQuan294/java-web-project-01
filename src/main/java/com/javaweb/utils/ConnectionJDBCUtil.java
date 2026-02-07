@@ -3,6 +3,9 @@ package com.javaweb.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+
 public class ConnectionJDBCUtil {
 	static final String DB_URL = "jdbc:mysql://localhost:3306/java_web_project01";
 	static final String USER = "root";
