@@ -1,40 +1,5 @@
 package com.javaweb.repository.impl;
 
-import java.sql.Statement;
-
-import org.springframework.stereotype.Repository;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import com.javaweb.repository.DistrictRepository;
-import com.javaweb.repository.entity.DistrictEntity;
-import com.javaweb.utils.ConnectionJDBCUtil;
-
-@Repository
-public class DistrictRepositoryImpl implements DistrictRepository{
-
-	@Override
-	public DistrictEntity findNameById(Long id) {
-		String sql = "SELECT d.name" + "\n" +   
-					 "FROM district d" + "\n" +
-					 "WHERE d.id = " + id + ";";
-		DistrictEntity districtEntity = new DistrictEntity();
-		try (Connection conn = ConnectionJDBCUtil.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sql);) {
-
-			while (rs.next()) {
-				districtEntity.setName(rs.getString("name"));
-			}
-			System.out.println("Connected database successfully...");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Connected database failed...");
-		}
-		return districtEntity;
-	}
-
+public class DistrictRepositoryImpl {
+	
 }
